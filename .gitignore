@@ -43,3 +43,11 @@ vignettes/*.pdf
 
 # RDS data files
 *.rds
+
+# Auto-generate LaTeX files
+latexStuff/*.aux
+latexStuff/*.log
+latexStuff/*.bbl
+latexStuff/*.blg
+
+

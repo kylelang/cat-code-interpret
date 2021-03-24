@@ -204,6 +204,117 @@ mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
 
 coef(fit)[1] - mm[1]
 
+###--------------------------------------------------------------------------###
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Independent codes, deterministic outcome:
+x1 <- factor(rep(c(0, 1), (n / 2)), labels = c("foo", "bar"))
+x2 <- factor(rep(c(0, 1), each = (n / 2)), labels = c("bob", "bill"))
+
+contrasts(x1) <- contr.sum(levels(x1))
+contrasts(x2) <- contr.wec(x2, "bob")
+
+x1 <- fixEcNames(x1)
+
+table(x1, x2)
+chisq.test(x1, x2)
+
+X <- model.matrix(~ x1 + x2)
+
+y <- X %*% beta
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Independent codes, noisy outcome:
+y <- X %*% beta + rnorm(n, 0, 10)
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Correlated codes, deterministic outcome:
+x1 <- x2 <- rep(c(0, 1), each = (n / 2))
+
+x2[1 : (n / 10)]           <- 1
+x2[(n - (n / 10) + 1) : n] <- 0
+
+tab <- table(x1, x2)
+colSums(tab)
+rowSums(tab)
+
+chisq.test(x1, x2)
+
+x1 <- factor(x1, labels = c("foo", "bar"))
+x2 <- factor(x2, labels = c("bob", "bill"))
+
+contrasts(x1) <- contr.sum(levels(x1))
+contrasts(x2) <- contr.wec(x2, "bob")
+
+x1 <- fixEcNames(x1)
+
+X <- model.matrix(~ x1 + x2)
+
+y <- X %*% beta
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Correlated codes, noisy outcome:
+y <- X %*% beta + rnorm(n, 0, 10)
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
 
 ###--------------------------------------------------------------------------###
 ###--Unbalanced Groups-------------------------------------------------------###
@@ -393,3 +504,112 @@ mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
 coef(fit)[1] - mm[1]
 
 ###--------------------------------------------------------------------------###
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Independent codes, deterministic outcome:
+x1 <- factor(rbinom(n, 1, 0.7), labels = c("foo", "bar"))
+x2 <- factor(rbinom(n, 1, 0.7), labels = c("bob", "bill"))
+
+contrasts(x1) <- contr.sum(levels(x1))
+contrasts(x2) <- contr.wec(x2, "bob")
+
+x1 <- fixEcNames(x1)
+
+table(x1, x2)
+chisq.test(x1, x2)
+
+X <- model.matrix(~ x1 + x2)
+
+y <- X %*% beta
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Independent codes, noisy outcome:
+y <- X %*% beta + rnorm(n, 0, 10)
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Correlated codes, deterministic outcome:
+x1 <- x2 <- rep(c(0, 1), each = (n / 2))
+
+x2[1 : (n / 5)]            <- 1
+x2[(n - (n / 10) + 1) : n] <- 0
+
+tab <- table(x1, x2)
+colSums(tab)
+rowSums(tab)
+
+chisq.test(x1, x2)
+
+x1 <- factor(x1, labels = c("foo", "bar"))
+x2 <- factor(x2, labels = c("bob", "bill"))
+
+contrasts(x1) <- contr.sum(levels(x1))
+contrasts(x2) <- contr.wec(x2, "bob")
+
+x1 <- fixEcNames(x1)
+
+X <- model.matrix(~ x1 + x2)
+
+y <- X %*% beta
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
+
+###--------------------------------------------------------------------------###
+
+## EC & WEC: Correlated codes, noisy outcome:
+y <- X %*% beta + rnorm(n, 0, 10)
+
+fit <- lm(y ~ x1 + x2)
+summary(fit)
+
+tab <- tapply(y, list(x1, x2), mean)
+w   <- table(x2) / length(x2)
+
+mData <- mean(apply(tab, 1, function(x, w) sum(x * w), w = w))
+
+coef(fit)[1] - mData
+
+mm <- summary(emmeans(fit, "x1", weights = "proportional"))$emmean
+
+coef(fit)[1] - mean(mm)
