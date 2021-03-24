@@ -26,4 +26,4 @@ marginal mean computed via the **emmeans** package. The estimated intercepts
 sometime match, and sometimes do not match, their respective marginal means
 computed from the raw data. A summary of the concordance between the intercept
 estimates and the raw data-based mean estimates is available in this [Google
-Sheet](https://docs.google.com/spreadsheets/d/1mckS-lc754z989uuLWjGnCaFrwU3FB2fpNT4mLNtZUU/edit#gid=276481204).
+Sheet](https://docs.google.com/spreadsheets/d/1mckS-lc754z989uuLWjGnCaFrwU3FB2fpNT4mLNtZUU/edit?usp=sharing).
